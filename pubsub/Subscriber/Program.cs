@@ -4,7 +4,7 @@ using Messages;
 const string AMQP = "amqps://spjuzoxw:mMT6Y4tSsLW6I6jX3FTIcjRDUodd7JaD@feisty-maroon-kiwi.rmq5.cloudamqp.com/spjuzoxw";
 
 var bus = RabbitHutch.CreateBus(AMQP);
-bus.PubSub.Subscribe<Greeting>("SUBSCRIPTION_ID", greeting => {
+bus.PubSub.Subscribe<Greeting>("cristian.cazan", greeting => {
     Console.WriteLine(greeting);
 });
 
