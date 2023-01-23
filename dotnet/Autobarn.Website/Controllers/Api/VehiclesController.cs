@@ -20,23 +20,23 @@ namespace Autobarn.Website.Controllers.Api {
 
 		private const int PAGE_SIZE = 10;
 		[HttpGet]
-		public IActionResult Get(int index = 0) {
-			var items = db.ListVehicles().Skip(index).Take(PAGE_SIZE);
-			var total = db.CountVehicles();
+		public IActionResult Get(char startsWith = 'a') {
+			var items = db.ListVehicles().Where(v => v.ModelCode.ToLower().StartsWith(startsWith));
+			var total = items.Count();
 			// ReSharper disable once InconsistentNaming
 			dynamic _links = new ExpandoObject();
 			_links.self = new {
-				href = $"/api/vehicles?index={index}"
+				href = $"/api/vehicles?firstLetter={startsWith}"
 			};
-			if (index > 0) {
+			if (startsWith != 'a' && total != 0) {
 				_links.previous = new {
-					href = $"/api/vehicles?index={index - PAGE_SIZE}"
+					href = $"/api/vehicles?firstLetter={(char)(startsWith - 1)}"
 				};
 			}
 
-			if (index + PAGE_SIZE < total) {
+			if (startsWith != 'z' && total != 0) {
 				_links.next = new {
-					href = $"/api/vehicles?index={index + PAGE_SIZE}"
+					href = $"/api/vehicles?firstLetter={(char) (startsWith + 1)}"
 				};
 			}
 			var result = new {

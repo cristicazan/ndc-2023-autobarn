@@ -18,10 +18,10 @@ paths:
       description: Returns a list of all the vehicles available in the Autobarn database
       parameters:
         - in: query
-          name: index
+          name: startsWith
           schema:
-            type: integer
-          description: The zero-based index of the page you want.
+            type: char
+          description: The letter with which the vehicle license plate starts
       responses:
         '200':    # status code
           description: A JSON array of vehicle objects
