@@ -1,4 +1,4 @@
-﻿using Autobarn.Data.Entities;
+using Autobarn.Data.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,6 +39,21 @@ namespace Autobarn.Data {
 
 		public void DeleteVehicle(Vehicle vehicle) {
 			dbContext.Vehicles.Remove(vehicle);
+			dbContext.SaveChanges();
+		}
+
+		public void CreateModel(Model model) {
+			dbContext.Models.Add(model);
+			dbContext.SaveChanges();
+		}
+
+		public void UpdateModel(Model model) {
+			var existing = FindModel(model.Code);
+			if (existing == default) {
+				dbContext.Models.Add(model);
+			} else {
+				dbContext.Entry(existing).CurrentValues.SetValues(model);
+			}
 			dbContext.SaveChanges();
 		}
 	}

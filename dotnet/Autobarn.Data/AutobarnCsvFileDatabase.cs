@@ -104,6 +104,14 @@ namespace Autobarn.Data {
 			UpdateVehicle(vehicle);
 		}
 
+		public void CreateModel(Model model) {
+			models.Add(model.Code, model);
+		}
+
+		public void UpdateModel(Model model) {
+			models[model.Code] = model;
+		}
+
 		public void UpdateVehicle(Vehicle vehicle) {
 			vehicles[vehicle.Registration] = vehicle;
 		}

@@ -1,4 +1,4 @@
-﻿using Autobarn.Data.Entities;
+using Autobarn.Data.Entities;
 using System.Collections.Generic;
 
 namespace Autobarn.Data {
@@ -15,5 +15,8 @@ namespace Autobarn.Data {
 		public void CreateVehicle(Vehicle vehicle);
 		public void UpdateVehicle(Vehicle vehicle);
 		public void DeleteVehicle(Vehicle vehicle);
+
+		public void CreateModel(Model model);
+		public void UpdateModel(Model model);
 	}
 }
