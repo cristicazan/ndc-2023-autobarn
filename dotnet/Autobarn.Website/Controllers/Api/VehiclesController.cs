@@ -8,7 +8,6 @@ using System.Linq;
 using Autobarn.Website.Models;
 
 namespace Autobarn.Website.Controllers.Api {
-
 	[ApiController]
 	[Route("api/[controller]")]
 	public class VehiclesController : ControllerBase {
@@ -20,23 +19,23 @@ namespace Autobarn.Website.Controllers.Api {
 
 		private const int PAGE_SIZE = 10;
 		[HttpGet]
-		public IActionResult Get(char startsWith = 'a') {
-			var items = db.ListVehicles().Where(v => v.ModelCode.ToLower().StartsWith(startsWith));
-			var total = items.Count();
+		public IActionResult Get(int index = 0) {
+			var items = db.ListVehicles().Skip(index).Take(PAGE_SIZE);
+			var total = db.CountVehicles();
 			// ReSharper disable once InconsistentNaming
 			dynamic _links = new ExpandoObject();
 			_links.self = new {
-				href = $"/api/vehicles?firstLetter={startsWith}"
+				href = $"/api/vehicles?index={index}"
 			};
-			if (startsWith != 'a' && total != 0) {
+			if (index > 0) {
 				_links.previous = new {
-					href = $"/api/vehicles?firstLetter={(char)(startsWith - 1)}"
+					href = $"/api/vehicles?index={index - PAGE_SIZE}"
 				};
 			}
 
-			if (startsWith != 'z' && total != 0) {
+			if (index + PAGE_SIZE < total) {
 				_links.next = new {
-					href = $"/api/vehicles?firstLetter={(char) (startsWith + 1)}"
+					href = $"/api/vehicles?index={index + PAGE_SIZE}"
 				};
 			}
 			var result = new {
@@ -76,3 +75,4 @@ namespace Autobarn.Website.Controllers.Api {
 		}
 	}
 }
+
