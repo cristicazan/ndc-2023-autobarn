@@ -30,7 +30,7 @@ while (true) {
     Console.WriteLine(request);
 	var reply = grpcClient.SayHello(request);
 	Console.WriteLine(reply.Message);
-    Console.WriteLine($"The weather is: {reply.Weather}");
+    Console.WriteLine($"The weather is: not known");
 }
 
 int GetIntFromKey(ConsoleKeyInfo key) {
