@@ -1,3 +1,6 @@
+using Grpc.Core;
+using GrpcServer;
+
 namespace GrpcServer.Services;
 
 public class GreeterService : Greeter.GreeterBase {
@@ -12,3 +15,4 @@ public class GreeterService : Greeter.GreeterBase {
 			Message = $"Hello, {request.Name}. The time is {DateTime.Now:O}"
 		});
 	}
+}
