@@ -27,7 +27,7 @@ namespace Autobarn.Website.GraphQL.Queries {
 			Field<ListGraphType<VehicleGraphType>>("VehiclesByYear")
 				.Description("Return vehicles matching a specified year")
 				.Arguments(
-					MakeNonNullStringArgument("Year", "The year of cars you want"),
+					MakeNonNullIntArgument("Year", "The year of cars you want"),
 					MakeNonNullEnumArgument<ManufacteredType>("ManufacteredType", "Type of manufactered filter"))
 				.Resolve(GetVehiclesByYear);
 		}
@@ -57,6 +57,12 @@ namespace Autobarn.Website.GraphQL.Queries {
 
 		private QueryArgument MakeNonNullStringArgument(string name, string description) {
 			return new QueryArgument<NonNullGraphType<StringGraphType>> {
+				Name = name, Description = description
+			};
+		}
+
+		private QueryArgument MakeNonNullIntArgument(string name, string description) {
+			return new QueryArgument<NonNullGraphType<IntGraphType>> {
 				Name = name, Description = description
 			};
 		}
