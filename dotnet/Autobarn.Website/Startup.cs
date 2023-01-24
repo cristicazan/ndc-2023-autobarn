@@ -12,6 +12,7 @@ using Autobarn.Website.GraphQL.Schemas;
 using Autobarn.Website.GraphQL.GraphTypes;
 using GraphiQl;
 using GraphQL.Types;
+using Autobarn.Website.Hubs;
 
 namespace Autobarn.Website {
 	public class Startup {
@@ -46,6 +47,8 @@ namespace Autobarn.Website {
 				.AddNewtonsoftJson()
 				.AddSchema<AutobarnSchema>()
 				.AddGraphTypes(typeof(VehicleGraphType).Assembly));
+
+			services.AddSignalR();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
@@ -74,6 +77,7 @@ namespace Autobarn.Website {
 			app.UseGraphiQl("/graphiql");
 
 			app.UseEndpoints(endpoints => {
+				endpoints.MapHub<AutobarnHub>("/hub");
 				endpoints.MapControllerRoute(
 					name: "default",
 					pattern: "{controller=Home}/{action=Index}/{id?}");
