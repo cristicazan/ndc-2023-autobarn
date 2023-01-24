@@ -24,6 +24,25 @@ namespace Autobarn.Website.GraphQL.Queries {
 				.Description("Return vehicles matching a specified color")
 				.Arguments(MakeNonNullStringArgument("color", "The color of cars you want"))
 				.Resolve(GetVehiclesByColor);
+			Field<ListGraphType<VehicleGraphType>>("VehiclesByYear")
+				.Description("Return vehicles matching a specified year")
+				.Arguments(
+					MakeNonNullStringArgument("Year", "The year of cars you want"),
+					MakeNonNullEnumArgument<ManufacteredType>("ManufacteredType", "Type of manufactered filter"))
+				.Resolve(GetVehiclesByYear);
+		}
+
+		private IEnumerable<Vehicle> GetVehiclesByYear(IResolveFieldContext<object> context) {
+			var year = context.GetArgument<int>("year");
+			var manufacteredType = context.GetArgument<ManufacteredType>("manufacteredType");
+			if (manufacteredType == ManufacteredType.After) {
+				return db.ListVehicles().Where(v => v.Year > year);
+			}
+			else if (manufacteredType == ManufacteredType.Before) {
+				return db.ListVehicles().Where(v => v.Year < year);
+			}
+
+			return db.ListVehicles().Where(v => v.Year == year);
 		}
 
 		private IEnumerable<Vehicle> GetVehiclesByColor(IResolveFieldContext<object> context) {
@@ -42,7 +61,19 @@ namespace Autobarn.Website.GraphQL.Queries {
 			};
 		}
 
+		private QueryArgument MakeNonNullEnumArgument<EType>(string name, string description) where EType: System.Enum {
+			return new QueryArgument<NonNullGraphType<EnumerationGraphType<EType>>> {
+				Name = name, Description = description
+			};
+		}
+
 		private IEnumerable<Vehicle> GetAllVehicles(IResolveFieldContext<object> arg)
 			=> db.ListVehicles();
+
+		public enum ManufacteredType {
+			Before,
+			After,
+			Exactly
+		}
 	}
 }
