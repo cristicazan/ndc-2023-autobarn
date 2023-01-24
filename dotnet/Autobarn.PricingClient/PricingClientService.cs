@@ -39,13 +39,15 @@ namespace Autobarn.PricingClient {
 				var request = new PriceRequest {
 					Year = message.Year,
 					Color = message.Color,
-					Make = message.Make, Model = message.Model
+					Make = message.Make,
+					Model = message.Model,
+					CorrelationId = message.AutobarnCorrelationId.ToString()
 				};
 				var reply = grpcClient.GetPrice(request);
-				logger.LogInformation($"Got price: {reply.Price} {reply.CurrencyCode}");
+				logger.LogInformation($"{reply.CorrelationId}: Got price: {reply.Price} {reply.CurrencyCode}");
 			}
 			catch (Exception ex) {
-				logger.LogError(ex, "Error in HandleNewVehicleMessage");
+				logger.LogError(ex, $"{message.AutobarnCorrelationId}: Error in HandleNewVehicleMessage");
 				throw;
 			}
 		}

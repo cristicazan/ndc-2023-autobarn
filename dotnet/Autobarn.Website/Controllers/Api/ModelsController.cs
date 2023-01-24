@@ -10,6 +10,7 @@ using Autobarn.Messages;
 using Autobarn.Website.Models;
 using EasyNetQ;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Autobarn.Website.Controllers.Api {
 	[ApiController]
@@ -17,10 +18,12 @@ namespace Autobarn.Website.Controllers.Api {
 	public class ModelsController : ControllerBase {
 		private readonly IAutobarnDatabase db;
 		private readonly IBus bus;
+		private readonly ILogger<ModelsController> logger;
 
-		public ModelsController(IAutobarnDatabase db, IBus bus) {
+		public ModelsController(IAutobarnDatabase db, IBus bus, ILogger<ModelsController> logger) {
 			this.db = db;
 			this.bus = bus;
+			this.logger = logger;
 		}
 
 		[HttpGet]
@@ -66,6 +69,7 @@ namespace Autobarn.Website.Controllers.Api {
 				Make = vehicle?.VehicleModel?.Manufacturer?.Name ?? "(make not supplied)",
 				Model = vehicle?.VehicleModel?.Name ?? "(model not supplied)",
 			};
+			logger.LogDebug($"Publishing message with correlation ID: {message.AutobarnCorrelationId}");
 			bus.PubSub.Publish(message);
 		}
 	}

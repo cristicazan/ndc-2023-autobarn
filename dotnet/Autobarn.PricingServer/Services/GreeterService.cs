@@ -12,15 +12,18 @@ namespace Autobarn.PricingServer.Services {
 		}
 
 		public override Task<PriceReply> GetPrice(PriceRequest request, ServerCallContext context) {
+			logger.LogDebug($"{request.CorrelationId}: GetPrice {request}");
 			try {
 				if (request.Color.Equals("Purple", StringComparison.InvariantCultureIgnoreCase)) {
-					throw new Exception("Purple cars are not allowed. Sorry");
+					throw new Exception($"{request.CorrelationId}: Purple cars are not allowed. Sorry");
 				}
 
 				return Task.FromResult(
 					new PriceReply {
 						Price = 12345,
-						CurrencyCode = "GBP"
+						CurrencyCode = "GBP",
+						CorrelationId = request.CorrelationId
+
 					});
 			}
 			catch (Exception ex) {

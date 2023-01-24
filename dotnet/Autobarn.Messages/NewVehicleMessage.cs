@@ -6,8 +6,9 @@ namespace Autobarn.Messages {
 		public string Color { get; set; } = String.Empty;
 		public int Year { get; set; }
 		public DateTimeOffset ListedAt { get; set; }
+		public Guid AutobarnCorrelationId { get; set; } = Guid.NewGuid();
 
 		public override string ToString()
-			=> $"{Registration}: {Make} {Model} ({Color}, {Year} at {ListedAt}";
+			=> $"{AutobarnCorrelationId} {Registration}: {Make} {Model} ({Color}, {Year} at {ListedAt}";
 	}
 }
